@@ -225,15 +225,14 @@ typedef int                  cmsBool;
 
 #endif  // CMS_USE_BIG_ENDIAN
 
-
 // Calling convention -- this is hardly platform and compiler dependent
 #ifdef CMS_IS_WINDOWS_
-#  if defined(CMS_DLL) || defined(CMS_DLL_BUILD)
+#   if !defined(CMS_STATIC)
 #     ifdef __BORLANDC__
 #        define CMSEXPORT       __stdcall _export
 #        define CMSAPI
 #     else
-#        define CMSEXPORT      __stdcall
+#         define CMSEXPORT
 #        ifdef CMS_DLL_BUILD
 #            define CMSAPI    __declspec(dllexport)
 #        else
