@@ -17,6 +17,25 @@ if(WIN32)
     endif(MSVC)
 endif(WIN32)
 
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles ("
+    #include <immintrin.h>
+    int main ()
+    {
+        __m128d a, b;
+        double vals[2] = {0};
+        a = _mm_loadu_pd (vals);
+        b = _mm_add_pd (a,a);
+        _mm_storeu_pd (vals,b);
+        return (0);
+    }"
+    HAVE_SSE2)
+
+if (NOT HAVE_SSE2)
+    message(STATUS "Disabling SSE optimizations, as the target doesn't support them")
+    add_compile_definitions(-DCMS_DONT_USE_SSE2=1)
+endif()
+
 set(lcms_SRCS
     cmscnvrt.c
     cmserr.c
